@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-public class DevTicketingSecurityApplication {
+public class DevTicketingRestApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DevTicketingSecurityApplication.class, args);
+        SpringApplication.run(DevTicketingRestApplication.class, args);
     }
 
     //third party beans need to be inside @Configuration -- @SpringBootApplication covers @Configuration !!
