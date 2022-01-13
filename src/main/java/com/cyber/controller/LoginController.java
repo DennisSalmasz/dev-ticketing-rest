@@ -1,5 +1,6 @@
 package com.cyber.controller;
 
+import com.cyber.annotation.DefaultExceptionMessage;
 import com.cyber.dto.UserDTO;
 import com.cyber.entity.ResponseWrapper;
 import com.cyber.entity.User;
@@ -8,6 +9,8 @@ import com.cyber.exception.TicketNGProjectException;
 import com.cyber.mapper.MapperUtil;
 import com.cyber.service.UserService;
 import com.cyber.util.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Authentication Controller",description = "Authenticate API")
 public class LoginController {
 
 	private AuthenticationManager authenticationManager;
@@ -31,6 +35,8 @@ public class LoginController {
 	}
 
 	@PostMapping("/authenticate")
+	@DefaultExceptionMessage(defaultMessage = "Bad Credentials !!!")
+	@Operation(summary = "Login to application")
 	public ResponseEntity<ResponseWrapper> doLogin(@RequestBody AuthenticationRequest authenticationRequest) throws TicketNGProjectException {
 
 		String password = authenticationRequest.getPassword();
