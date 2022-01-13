@@ -1,6 +1,5 @@
 package com.cyber.entity;
 
-import com.cyber.entity.common.UserPrincipal;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +23,9 @@ public class BaseEntityListener extends AuditingEntityListener {
         baseEntity.lastUpdateUserId = 1L;
 
         if (authentication != null && !authentication.getName().equals("anonymousUser")){
-            Object principal = authentication.getPrincipal();
-            baseEntity.insertUserId=((UserPrincipal) principal).getId();
-            baseEntity.lastUpdateUserId=((UserPrincipal) principal).getId();
+            long id = Long.parseLong(authentication.getName());
+            baseEntity.insertUserId = id;
+            baseEntity.lastUpdateUserId = id;
         }
     }
 
@@ -39,9 +38,8 @@ public class BaseEntityListener extends AuditingEntityListener {
         baseEntity.lastUpdateUserId = 1L;
 
         if (authentication != null && !authentication.getName().equals("anonymousUser")){
-            Object principal = authentication.getPrincipal();
-
-            baseEntity.lastUpdateUserId=((UserPrincipal) principal).getId();
+            long id = Long.parseLong(authentication.getName());
+            baseEntity.lastUpdateUserId = id;
         }
     }
 }
