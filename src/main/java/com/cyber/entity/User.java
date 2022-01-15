@@ -20,7 +20,7 @@ public class User extends BaseEntity{
     private String lastName;
     private String userName;
     private String passWord;
-    private boolean enabled;
+    private boolean enabled; //is user confirmed through email?
     private String phone;
 
     //many roles can be assigned to one user

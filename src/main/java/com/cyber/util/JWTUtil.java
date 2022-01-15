@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Component
 public class JWTUtil {
 
-    @Value("${security.jwt.secret-key")
+    @Value("${security.jwt.secret-key}")
     private String secret = "ticketng";
 
     //this is only for payload - claims

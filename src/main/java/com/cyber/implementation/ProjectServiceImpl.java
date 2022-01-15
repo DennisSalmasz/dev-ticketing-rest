@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +85,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDTO> listAllProjectDetails() {
+    public List<ProjectDTO> listAllProjectDetails() throws AccessDeniedException {
         //in header.html -- sec:authentication="name" -- getName() comes from here
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserDTO currentUserDTO = userService.findByUserName(username);

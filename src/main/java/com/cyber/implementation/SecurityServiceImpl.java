@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +32,12 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserDTO userDTO = userService.findByUserName(username);
+        UserDTO userDTO = null;
+        try {
+            userDTO = userService.findByUserName(username);
+        } catch (AccessDeniedException e) {
+            e.printStackTrace();
+        }
         //if no such user in db, this will prevent login page crash!!
         if(userDTO == null) {
             throw new UsernameNotFoundException("This username does not exist !!");
@@ -42,7 +48,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public User loadUser(String param) {
+    public User loadUser(String param) throws AccessDeniedException {
         UserDTO user = userService.findByUserName(param);
         return mapperUtil.convert(user,new User());
     }

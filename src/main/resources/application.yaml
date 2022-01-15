@@ -1,3 +1,5 @@
+app:
+  local-url: http://localhost:${server.port}
 server:
   port: 8080
 spring:
@@ -10,7 +12,7 @@ spring:
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
-  #  initialization-mode: always
+    initialization-mode: always
     data: classpath:data.sql
   jpa:
     properties:
@@ -20,6 +22,23 @@ spring:
       ddl-auto: update
     show-sql: false
     defer-datasource-initialization: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          starttls:
+            enabled: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    username: dennis.salmaz@gmail.com
+    password: Dsalmaz-11
 security:
   jwt:
     secret-key: ticketng

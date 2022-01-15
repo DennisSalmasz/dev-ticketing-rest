@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.nio.file.AccessDeniedException;
+
 @Controller
 @RequestMapping("user")
 public class UserController {
@@ -36,13 +38,13 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String insertUser(UserDTO user,Model model){
+    public String insertUser(UserDTO user,Model model) throws TicketNGProjectException {
         userService.save(user);
         return "redirect:/user/create";
     }
 
     @GetMapping("update/{username}")
-    public String editUser(@PathVariable("username") String username, Model model){
+    public String editUser(@PathVariable("username") String username, Model model) throws AccessDeniedException {
 
         model.addAttribute("user", userService.findByUserName(username));
         model.addAttribute("roles",roleService.listAllRoles());

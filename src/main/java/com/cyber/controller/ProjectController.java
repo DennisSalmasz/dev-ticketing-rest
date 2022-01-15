@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Controller
@@ -67,7 +68,7 @@ public class ProjectController {
     }
 
     @GetMapping("/manager/complete")
-    public String getProjectByManager(Model model){
+    public String getProjectByManager(Model model) throws AccessDeniedException {
         List<ProjectDTO> projects = projectService.listAllProjectDetails();
         model.addAttribute("projects",projects);
         return "/manager/project-status";
