@@ -17,12 +17,12 @@ public class MapperUtil {
     public <T> T convert(Object objectToBeConverted, T convertedObject){
         return modelMapper.map(objectToBeConverted,(Type) convertedObject.getClass());
     }
-
-    public <T> T convertToEntity(Object objectToBeConverted, T convertedObject){
-        return modelMapper.map(objectToBeConverted, (Type) convertedObject.getClass());
-    }
-
-    public <T> T convertToDto(Object objectToBeConverted, T convertedObject){
-        return modelMapper.map(objectToBeConverted,(Type) convertedObject.getClass());
-    }
+//
+//    public <T> T convertToEntity(Object objectToBeConverted, T convertedObject){
+//        return modelMapper.map(objectToBeConverted, (Type) convertedObject.getClass());
+//    }
+//
+//    public <T> T convertToDto(Object objectToBeConverted, T convertedObject){
+//        return modelMapper.map(objectToBeConverted,(Type) convertedObject.getClass());
+//    }
 }

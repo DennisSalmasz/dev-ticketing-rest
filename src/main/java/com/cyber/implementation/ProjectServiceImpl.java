@@ -5,14 +5,17 @@ import com.cyber.dto.UserDTO;
 import com.cyber.entity.Project;
 import com.cyber.entity.User;
 import com.cyber.enums.Status;
+import com.cyber.exception.TicketNGProjectException;
 import com.cyber.mapper.MapperUtil;
 import com.cyber.repository.ProjectRepository;
+import com.cyber.repository.UserRepository;
 import com.cyber.service.ProjectService;
 import com.cyber.service.TaskService;
 import com.cyber.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -25,12 +28,14 @@ public class ProjectServiceImpl implements ProjectService {
     private UserService userService;
     private TaskService taskService;
     private MapperUtil mapperUtil;
+    private UserRepository userRepository;
 
-    public ProjectServiceImpl(@Lazy ProjectRepository projectRepository, UserService userService, TaskService taskService, MapperUtil mapperUtil) {
+    public ProjectServiceImpl(@Lazy ProjectRepository projectRepository, UserService userService, TaskService taskService, MapperUtil mapperUtil, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.userService = userService;
         this.taskService = taskService;
         this.mapperUtil = mapperUtil;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,64 +51,77 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void save(ProjectDTO dto) {
-        dto.setProjectStatus(Status.OPEN);
-        Project obj = mapperUtil.convert(dto,new Project());
-        //need to convert assigned manager to entity as well - it is dependant !!
-        //obj.setAssignedManager(userMapper.convertToEntity(dto.getAssignedManager()));
-        projectRepository.save(obj);
+    public ProjectDTO save(ProjectDTO dto) throws TicketNGProjectException {
+        Project foundProject = projectRepository.findByProjectCode(dto.getProjectCode());
+        if(foundProject != null){
+            throw new TicketNGProjectException("This project already exists !!!");
+        }
+        Project project = mapperUtil.convert(dto,new Project());
+        Project createdProject = projectRepository.save(project);
+        return mapperUtil.convert(createdProject,new ProjectDTO());
     }
 
     @Override
-    public void update(ProjectDTO dto) {
+    public ProjectDTO update(ProjectDTO dto) throws TicketNGProjectException {
         Project project = projectRepository.findByProjectCode(dto.getProjectCode());
+        if(project == null){
+            throw new TicketNGProjectException("This project does not exist !!!");
+        }
         Project convertedProject = mapperUtil.convert(dto,new Project());
-        convertedProject.setId(project.getId());
-        convertedProject.setProjectStatus(project.getProjectStatus());
-        projectRepository.save(convertedProject);
+        Project updatedProject = projectRepository.save(convertedProject);
+        return mapperUtil.convert(updatedProject,new ProjectDTO());
     }
 
     @Override
-    public void delete(String code) {
+    public void delete(String code) throws TicketNGProjectException {
         Project project = projectRepository.findByProjectCode(code);
-        project.setIsDeleted(true); //now, related row in DB will not be deleted !!
+        if(project == null){
+            throw new TicketNGProjectException("This project does not exist !!!");
+        }
+        //related row in DB will not be deleted !!
+        project.setIsDeleted(true);
 
-        //when I delete a project, its tasks should be deleted as well
-
-        //now I am able to create another project with the same project code
+        //we change project code of the deleted project - so that we can create a new project with the same code - projectCode unique !!
         project.setProjectCode(project.getProjectCode() + "-" + project.getId());
         projectRepository.save(project);
 
+        //when I delete a project, its tasks should be deleted as well
         taskService.deleteByProject(mapperUtil.convert(project,new ProjectDTO()));
     }
 
     @Override
-    public void complete(String code) {
+    public ProjectDTO complete(String code) throws TicketNGProjectException {
         Project project = projectRepository.findByProjectCode(code);
+        if(project == null){
+            throw new TicketNGProjectException("This project does not exist !!!");
+        }
         project.setProjectStatus(Status.COMPLETE);
-        projectRepository.save(project);
+        Project completedProject = projectRepository.save(project);
+        return mapperUtil.convert(completedProject,new ProjectDTO());
     }
 
     @Override
-    public List<ProjectDTO> listAllProjectDetails() throws AccessDeniedException {
-        //in header.html -- sec:authentication="name" -- getName() comes from here
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserDTO currentUserDTO = userService.findByUserName(username);
-        User user = mapperUtil.convert(currentUserDTO,new User());
-        List<Project> list = projectRepository.findAllByAssignedManager(user);
+    public List<ProjectDTO> listAllProjectDetails() throws AccessDeniedException, TicketNGProjectException {
 
-        return list.stream().map(project -> {
-                    ProjectDTO obj = mapperUtil.convert(project,new ProjectDTO());
-                    obj.setIncompleteTaskCount(taskService.totalUncompletedTasks(obj.getProjectCode()));
-                    obj.setCompleteTaskCount(taskService.totalCompletedTasks(obj.getProjectCode()));
-                    return obj;
-                }).collect(Collectors.toList());
+        String id = SecurityContextHolder.getContext().getAuthentication().getName(); //check WebSecurityConfig class !!
+        Long currentId = Long.parseLong(id);
+        User user = userRepository.findById(currentId).orElseThrow(() -> new TemplateInputException("This manager does not exist !!!"));
+        List<Project> projectList = projectRepository.findAllByAssignedManager(user);
+        if(projectList.size() == 0){
+            throw new TicketNGProjectException("This manager does not have any project assigned !!!");
+        }
+        return projectList.stream().map(project -> {
+                        ProjectDTO obj = mapperUtil.convert(project,new ProjectDTO());
+                        obj.setIncompleteTaskCount(taskService.totalUncompletedTasks(obj.getProjectCode()));
+                        obj.setCompleteTaskCount(taskService.totalCompletedTasks(obj.getProjectCode()));
+                        return obj;
+                    }).collect(Collectors.toList());
     }
 
     @Override
     public List<ProjectDTO> readAllByAssignedManager(User user) {
         List<Project> list = projectRepository.findAllByAssignedManager(user);
-        return list.stream().map(obj -> {return mapperUtil.convert(obj,new ProjectDTO());}).collect(Collectors.toList());
+        return list.stream().map(obj -> mapperUtil.convert(obj,new ProjectDTO())).collect(Collectors.toList());
     }
 
     @Override
