@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //we will use [@perAuthorize] to give authorization to certain roles
+@EnableGlobalMethodSecurity(prePostEnabled = true) //we will use [@perAuthorize] to give authorization to certain roles in Controller
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
