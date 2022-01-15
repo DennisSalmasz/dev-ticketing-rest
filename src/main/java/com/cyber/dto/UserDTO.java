@@ -21,12 +21,14 @@ public class UserDTO {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passWord;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String confirmPassword;
 
     private boolean enabled;
     private String phone;
-    private RoleDTO role;
-    private Gender gender;
 
+    private RoleDTO role;
+
+    private Gender gender;
 }

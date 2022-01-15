@@ -1,6 +1,8 @@
 package com.cyber.entity;
 
 import com.cyber.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,13 +16,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @Where(clause = "is_deleted=false") //this will automatically be added to each UserRepository query !!
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"},ignoreUnknown = true)
 public class User extends BaseEntity{
 
     private String firstName;
     private String lastName;
     private String userName;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passWord;
-    private boolean enabled; //is user confirmed through email?
+
+    private boolean enabled; //checks if user is confirmed through email !!
     private String phone;
 
     //many roles can be assigned to one user

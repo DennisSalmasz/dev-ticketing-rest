@@ -1,6 +1,7 @@
 package com.cyber.entity;
 
 import com.cyber.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "projects")
 @Where(clause = "is_deleted=false") //this will automatically be added to each ProjectRepository query - when query is executed, deleted data will not appear !!
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"},ignoreUnknown = true)
 public class Project extends BaseEntity{
 
     @Column(unique = true) //if same project code entered, will crash program - server side validation!!
