@@ -66,7 +66,7 @@ public class UserController {
 
     //only admin should see other profiles, and all roles should see solely their profiles - WORK ON THAT !!
     @GetMapping("/{username}")
-    @Operation(summary = "Read certain user")
+    @Operation(summary = "Read certain user by username")
     @DefaultExceptionMessage(defaultMessage = "Sth went wrong while retrieving certain user !!!")
     //@PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
@@ -85,7 +85,7 @@ public class UserController {
 
     //admin should be able to delete certain user
     @DeleteMapping("/{username}")
-    @Operation(summary = "Delete certain user")
+    @Operation(summary = "Delete certain user by username")
     @PreAuthorize("hasAuthority('Admin')")
     @DefaultExceptionMessage(defaultMessage = "Sth went wrong while deleting certain user !!!")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String username) throws TicketNGProjectException {
