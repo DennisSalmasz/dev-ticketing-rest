@@ -64,18 +64,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(UserDTO dto) {
+    public UserDTO update(UserDTO dto) throws TicketNGProjectException {
 
         //find current user - that has id
         User user = userRepository.findByUserName(dto.getUserName());
+
+        //check if user exists in DB to avoid the crash of the app !!
+        if(user == null){
+            throw new TicketNGProjectException("User does not exist !!");
+        }
+
         //map user dto into entity object
         User convertedUser = mapperUtil.convert(dto,new User());
+
         //encode password, before saving in DB
         convertedUser.setPassWord(passwordEncoder.encode(convertedUser.getPassWord()));
-        //
+
+        //bug !!!
         convertedUser.setEnabled(true);
+
         //set id to the converted object
         convertedUser.setId(user.getId());
+
         //save updated user
         userRepository.save(convertedUser);
 
@@ -86,7 +96,7 @@ public class UserServiceImpl implements UserService {
     public void delete(String username) throws TicketNGProjectException {
         User user = userRepository.findByUserName(username);
 
-        //check if user is deleted in DB to avoid the crash of the app !!
+        //check if user exists in DB to avoid the crash of the app !!
         if(user == null){
             throw new TicketNGProjectException("User does not exist !!");
         }
