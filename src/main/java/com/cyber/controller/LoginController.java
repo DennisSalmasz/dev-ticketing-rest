@@ -5,7 +5,7 @@ import com.cyber.dto.UserDTO;
 import com.cyber.entity.ConfirmationToken;
 import com.cyber.entity.ResponseWrapper;
 import com.cyber.entity.User;
-import com.cyber.entity.common.AuthenticationRequest;
+import com.cyber.entity.AuthenticationRequest;
 import com.cyber.exception.TicketNGProjectException;
 import com.cyber.util.MapperUtil;
 import com.cyber.service.ConfirmationTokenService;

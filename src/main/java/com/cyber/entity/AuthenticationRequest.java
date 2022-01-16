@@ -1,4 +1,4 @@
-package com.cyber.entity.common;
+package com.cyber.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
