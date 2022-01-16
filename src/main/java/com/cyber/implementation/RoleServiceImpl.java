@@ -2,7 +2,8 @@ package com.cyber.implementation;
 
 import com.cyber.dto.RoleDTO;
 import com.cyber.entity.Role;
-import com.cyber.mapper.MapperUtil;
+import com.cyber.exception.TicketNGProjectException;
+import com.cyber.util.MapperUtil;
 import com.cyber.repository.RoleRepository;
 import com.cyber.service.RoleService;
 import org.springframework.context.annotation.Lazy;
@@ -24,14 +25,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDTO> listAllRoles() {
-
         List<Role> list = roleRepository.findAll();
-        return list.stream().map(obj -> {return mapperUtil.convert(obj,new RoleDTO());}).collect(Collectors.toList());
+        return list.stream().map(obj -> mapperUtil.convert(obj,new RoleDTO())).collect(Collectors.toList());
     }
 
     @Override
-    public RoleDTO findById(Long id) {
-        Role role = roleRepository.findById(id).get();
+    public RoleDTO findById(Long id) throws TicketNGProjectException {
+        Role role = roleRepository.findById(id).orElseThrow(() -> new TicketNGProjectException("Role does not exist !!!"));
         return mapperUtil.convert(role,new RoleDTO());
     }
 }

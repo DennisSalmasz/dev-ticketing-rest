@@ -7,7 +7,7 @@ import com.cyber.entity.ConfirmationToken;
 import com.cyber.entity.ResponseWrapper;
 import com.cyber.entity.User;
 import com.cyber.exception.TicketNGProjectException;
-import com.cyber.mapper.MapperUtil;
+import com.cyber.util.MapperUtil;
 import com.cyber.service.ConfirmationTokenService;
 import com.cyber.service.RoleService;
 import com.cyber.service.UserService;

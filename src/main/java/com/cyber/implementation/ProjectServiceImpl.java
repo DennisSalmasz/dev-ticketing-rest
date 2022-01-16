@@ -1,12 +1,11 @@
 package com.cyber.implementation;
 
 import com.cyber.dto.ProjectDTO;
-import com.cyber.dto.UserDTO;
 import com.cyber.entity.Project;
 import com.cyber.entity.User;
 import com.cyber.enums.Status;
 import com.cyber.exception.TicketNGProjectException;
-import com.cyber.mapper.MapperUtil;
+import com.cyber.util.MapperUtil;
 import com.cyber.repository.ProjectRepository;
 import com.cyber.repository.UserRepository;
 import com.cyber.service.ProjectService;
@@ -15,7 +14,6 @@ import com.cyber.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.exceptions.TemplateInputException;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -105,7 +103,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         String id = SecurityContextHolder.getContext().getAuthentication().getName(); //check WebSecurityConfig class !!
         Long currentId = Long.parseLong(id);
-        User user = userRepository.findById(currentId).orElseThrow(() -> new TemplateInputException("This manager does not exist !!!"));
+        User user = userRepository.findById(currentId).orElseThrow(() -> new TicketNGProjectException("This manager does not exist !!!"));
         List<Project> projectList = projectRepository.findAllByAssignedManager(user);
         if(projectList.size() == 0){
             throw new TicketNGProjectException("This manager does not have any project assigned !!!");

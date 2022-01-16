@@ -5,7 +5,7 @@ import com.cyber.dto.TaskDTO;
 import com.cyber.dto.UserDTO;
 import com.cyber.entity.User;
 import com.cyber.exception.TicketNGProjectException;
-import com.cyber.mapper.MapperUtil;
+import com.cyber.util.MapperUtil;
 import com.cyber.repository.UserRepository;
 import com.cyber.service.ProjectService;
 import com.cyber.service.TaskService;

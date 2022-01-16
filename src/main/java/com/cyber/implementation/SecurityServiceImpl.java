@@ -2,9 +2,7 @@ package com.cyber.implementation;
 
 import com.cyber.dto.UserDTO;
 import com.cyber.entity.User;
-import com.cyber.entity.common.UserPrincipal;
-import com.cyber.mapper.MapperUtil;
-import com.cyber.repository.UserRepository;
+import com.cyber.util.MapperUtil;
 import com.cyber.service.SecurityService;
 import com.cyber.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
