@@ -1,9 +1,8 @@
-package com.cyber.implementation;
+package com.cyber.service;
 
 import com.cyber.entity.ConfirmationToken;
 import com.cyber.exception.TicketNGProjectException;
 import com.cyber.repository.ConfirmationTokenRepository;
-import com.cyber.service.ConfirmationTokenService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
