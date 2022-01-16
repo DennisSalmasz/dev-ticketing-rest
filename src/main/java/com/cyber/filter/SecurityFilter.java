@@ -62,7 +62,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private boolean checkIfUserIsValid(String username) throws AccessDeniedException {
         User currentUser = securityService.loadUser(username);
-        return currentUser != null && currentUser.isEnabled();
+        return currentUser != null && currentUser.getEnabled();
     }
 
 }

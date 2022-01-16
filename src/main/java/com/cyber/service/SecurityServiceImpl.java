@@ -31,7 +31,11 @@ public class SecurityServiceImpl implements SecurityService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserDTO userDTO = null;
-        userDTO = userService.findByUserName(username);
+        try {
+            userDTO = userService.findByUserName(username);
+        } catch (AccessDeniedException e) {
+            e.printStackTrace();
+        }
 
         //if no such user in db, this will prevent login page crash!!
         if(userDTO == null) {

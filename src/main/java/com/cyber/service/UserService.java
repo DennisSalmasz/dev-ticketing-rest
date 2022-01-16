@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserService {
 
     List<UserDTO> listAllUsers();
-    UserDTO findByUserName(String username);
+    UserDTO findByUserName(String username) throws AccessDeniedException;
     UserDTO save(UserDTO dto) throws TicketNGProjectException;
-    UserDTO update(UserDTO dto) throws TicketNGProjectException;
+    UserDTO update(UserDTO dto) throws TicketNGProjectException, AccessDeniedException;
     void delete(String username) throws TicketNGProjectException;
     void deleteByUserName(String username);
     List<UserDTO> listAllByRole(String role);

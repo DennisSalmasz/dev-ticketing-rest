@@ -26,7 +26,7 @@ public class User extends BaseEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passWord;
 
-    private boolean enabled; //checks if user is confirmed through email !!
+    private Boolean enabled; //checks if user is confirmed through email !!
     private String phone;
 
     //many roles can be assigned to one user

@@ -19,6 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -69,7 +70,7 @@ public class UserController {
     @Operation(summary = "Read certain user by username")
     @DefaultExceptionMessage(defaultMessage = "Sth went wrong while retrieving certain user !!!")
     //@PreAuthorize("hasAuthority('Admin')")
-    public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) throws AccessDeniedException {
         UserDTO userDTO = userService.findByUserName(username);
         return ResponseEntity.ok(new ResponseWrapper("Certain user is retrieved successfully",userDTO));
     }
@@ -78,7 +79,7 @@ public class UserController {
     @PutMapping
     @Operation(summary = "Update certain user")
     @DefaultExceptionMessage(defaultMessage = "Sth went wrong while updating certain user !!!")
-    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO userDTO) throws TicketNGProjectException {
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO userDTO) throws TicketNGProjectException, AccessDeniedException {
         UserDTO updatedUser = userService.update(userDTO);
         return ResponseEntity.ok(new ResponseWrapper("Certain user is updated successfully",updatedUser));
     }
