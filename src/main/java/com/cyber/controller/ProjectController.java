@@ -56,7 +56,7 @@ public class ProjectController {
     @PreAuthorize("hasAnyAuthority('Admin','Manager')")
     public ResponseEntity<ResponseWrapper> create(@RequestBody ProjectDTO projectDTO) throws TicketNGProjectException {
         ProjectDTO createdProject = projectService.save(projectDTO);
-        return ResponseEntity.ok(new ResponseWrapper("Project is created successfully"));
+        return ResponseEntity.ok(new ResponseWrapper("Project is created successfully",createdProject));
     }
 
     //update project by project code
@@ -85,8 +85,8 @@ public class ProjectController {
     @DefaultExceptionMessage(defaultMessage = "Sth went wrong while completing certain project by project code !!!")
     @PreAuthorize("hasAuthority('Manager')")
     public ResponseEntity<ResponseWrapper> completeProject(@PathVariable("projectCode") String projectCode) throws TicketNGProjectException {
-        projectService.complete(projectCode);
-        return ResponseEntity.ok(new ResponseWrapper("Certain project is complete successfully"));
+        ProjectDTO completedProject = projectService.complete(projectCode);
+        return ResponseEntity.ok(new ResponseWrapper("Certain project is complete successfully",completedProject));
     }
 
     //retrieve all project details by manager
